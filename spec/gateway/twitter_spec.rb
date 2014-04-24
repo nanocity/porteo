@@ -1,24 +1,27 @@
-require File.expand_path(File.join('.', 'spec_helper'), File.dirname(__FILE__))
-require 'yaml'
+require 'spec_helper'
 
-describe Porteo::Twitter_gateway do
+describe Porteo::Gateway::Twitter do
+  let( :twitter_config ) do
+    {
+      consumer_key:        'CONSUMER_KEY',
+      consumer_secret:     'CONSUMER_SECRET',
+      access_token:        'OAUTH_TOKEN',
+      access_token_secret: 'AOUTH_TOKEN_SECRET',
+    }
+  end
+
   # Check that respong to all methods
   it "should respond to all methods that are in the parent class" do
-    lambda{
-      Porteo::Twitter_gateway.new( {} ).should respond_to( :send_message )
-    }.should_not raise_error
+    Porteo::Gateway::Twitter.new( {} ).should respond_to( :send_message )
   end
 
   # Check that send a twitt
-  it "should send a twitt" do
-    config = YAML.load_file( './examples_helpers/config/clave.emitter' )
+  it "should send a twitt through Twitter API" do
+    message = { body: 'Im tweeting using Porteo' }
 
-    my_gw = Porteo::Twitter_gateway.new( config[:twitter][:default] )
+    Twitter::REST::Client.any_instance.stub( :update ).with( message[:body] ).and_return( true )
+    Twitter::REST::Client.any_instance.should_receive( :update ).with( message[:body] )
 
-    # set the message
-    message = { :body => "Im tweeting using Porteo ^_^" }
-
-    # and finally send the message
-    my_gw.send_message( message )
+    Porteo::Gateway::Twitter.new( twitter_config ).send_message( message )
   end
 end

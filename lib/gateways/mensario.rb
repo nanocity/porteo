@@ -15,48 +15,44 @@
 # You should have received a copy of the GNU General Public License
 # along with Porteo. If not, see <http://www.gnu.org/licenses/>.
 
-require 'mensario'
-require 'gateways/gateway'
-
 # Porteo is an integrated message sending service.
 # It allows you to send messages by various protocols (sms, email, twitter)
 # using differents gateways (mensario, pony, twitter API). You can also
 # integrate new protocols and gateways for your favorite messenger
 # service.
 module Porteo
+  module Gateway
+    # Gateway to use Mensario service
+    # In Porteo this class acts as a link between SMS protocol
+    # and Mensario gem
+    #
+    # This class inherits from Gateway and just overwrite
+    # the send_message method
+    class Mensario < Base
 
-  # Gateway to use Mensario service
-  # In Porteo this class acts as a link between SMS protocol
-  # and Mensario gem
-  #
-  # This class inherits from Gateway and just overwrite
-  # the send_message method
-  class Mensario_gateway < Gateway
+      connection_argument :license,
+        :password,
+        :username
 
-    connection_argument :license,
-                        :password,
-                        :username
+      # Send the SMS using Mensario gem
+      # @param [Hash] msg The message sections to send
+      # @return [nil]
+      def send_message( msg )
+        Mensario.set_config do
+          Mensario.license( @config[:license] )
+          Mensario.username( @config[:username] )
+          Mensario.password( @config[:password] )
+        end
 
-    # Send the SMS using Mensario gem
-    # @param [Hash] msg The message sections to send
-    # @return [nil]
-    def send_message( msg )
-      Mensario.set_config do
-        Mensario.license( @config[:license] )
-        Mensario.username( @config[:username] )
-        Mensario.password( @config[:password] )
+        Mensario.send_message( {
+          :text => msg[:text],
+          :sender => msg[:sender],
+          :code => msg[:code],
+          :phone => msg[:phone],
+          :timezone => msg[:timezone],
+          :date => msg[:date]
+        } )
       end
-
-      Mensario.send_message( {
-        :text => msg[:text],
-        :sender => msg[:sender],
-        :code => msg[:code],
-        :phone => msg[:phone],
-        :timezone => msg[:timezone],
-        :date => msg[:date]
-      } )
-     end
+    end
   end
-
 end
-

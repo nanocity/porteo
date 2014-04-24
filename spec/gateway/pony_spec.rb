@@ -1,26 +1,42 @@
-require File.expand_path(File.join('.', 'spec_helper'), File.dirname(__FILE__))
-require 'yaml'
-describe Porteo::Pony_gateway do
-  # Check that pony respond to all methods
-  it "should respond to all methods that are in the parent class" do
-    Porteo::Pony_gateway.new({}).should respond_to( :send_message )
+require 'spec_helper'
+
+describe Porteo::Gateway::Pony do
+  let( :email_config ) do
+    {
+      via: :smtp,
+      via_options: {
+        address: 'mail.domain.com',
+        port: 465,
+        user_name: 'USER',
+        password: 'PASSWORD',
+        enable_starttls_auto: false,
+        authentication: :plain,
+        domain: 'DOMAIN'
+      }
+    }
   end
 
-  # Check etc...
-  it "should send a mail" do
+  let( :email_data ) do
+    {
+      to:      'homer@nosolosoftware.biz',
+      from:    'marge@nosolosoftware.biz',
+      body:    'Yuhuuuu!',
+      subject: 'Test!'
+    }
+  end
 
-    # For a security reason, we load the config from a file
-    config = YAML.load_file('./examples_helpers/config/clave.emitter')
-    my_gw = Porteo::Pony_gateway.new(config[:mail][:default])
+  # Check that pony respond to all methods
+  it "should respond to all methods that are in the parent class" do
+    Porteo::Gateway::Pony.new({}).should respond_to( :send_message )
+  end
 
-    # We set the hash of the mail
-    mail = {}
-    mail[:to] = 'homer@nosolosoftware.biz'
-    mail[:subject] = 'Test de correo!'
-    mail[:from] = 'Marditos_Bastardos@nosolosoftware.biz'
-    mail[:body] = 'Yuhuuuu!'
+  it "should send a mail through Pony" do
+    pony_conf = email_data.merge( email_config )
 
-    my_gw.send_message( mail )
+    Pony.stub( :mail ).with( pony_conf ).and_return( true )
+    expect( Pony ).to receive( :mail ).with( pony_conf )
+
+    Porteo::Gateway::Pony.new( email_config ).send_message( email_data )
   end
 end
 

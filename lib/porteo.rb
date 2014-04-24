@@ -15,7 +15,23 @@
 # You should have received a copy of the GNU General Public License
 # along with Porteo. If not, see <http://www.gnu.org/licenses/>.
 
+require 'gateways/base'
+require 'gateways/twitter'
+require 'gateways/pony'
+require 'gateways/mensario'
+
+require 'protocols/base'
+require 'protocols/mail'
+require 'protocols/sms'
+require 'protocols/twitter'
+
 require 'message/message'
+
+require 'erb'
+require 'twitter'
+require 'mensario'
+require 'pony'
+require 'yaml'
 
 # Porteo is an integrated message sending service.
 # It allows you to send messages by various protocols (sms, email, twitter)

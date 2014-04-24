@@ -1,39 +1,35 @@
-require File.expand_path(File.join('.', 'spec_helper'), File.dirname(__FILE__))
-require 'yaml'
+require 'spec_helper'
 
-describe Porteo::Mail_protocol do
+describe Porteo::Protocol::Mail do
 
   describe "Check required fields" do
+    let( :email_config ){ YAML.load_file( EMITTER_PATH )[:mail][:default] }
+    let( :template ){     YAML.load_file( TEMPLATES_PATH + 'alert.mail' ) }
 
-    before(:each) do
-      @template = YAML.load_file( 'examples_helpers/config/templates/alert.mail' )
-      gw_config = YAML.load_file( 'examples_helpers/config/clave.emitter' )
+    before do
+      Pony.stub( :mail ).and_return( true )
 
-      @protocol = Porteo::Mail_protocol.new( gw_config[:mail][:default] )
+      @protocol = Porteo::Protocol::Mail.new( email_config )
+      @template = template
     end
 
-    # Check to sections
     it "should raise an exception if :to tag is no correct" do
       @template[:template][:to] = "www.mail.com"
 
       @protocol.set_template( @template[:template].to_s, @template[:requires] )
-      @protocol.set_template_params( :nombre => 'Luis', :repeticiones => 5 )
+      @protocol.set_template_params( :name => 'Luis', :iter => 5 )
 
-      lambda{
-        @protocol.send_message
-      }.should raise_error ArgumentError
+      expect{ @protocol.send_message }.to raise_exception( ArgumentError )
     end
 
-    # Check to sections
     it "should not raise any exception if :to tag is correct" do
       @template[:template][:to] = "homer@nosolosoftware.biz"
 
       @protocol.set_template( @template[:template].to_s, @template[:requires] )
-      @protocol.set_template_params( :nombre => 'Luis', :repeticiones => 5 )
+      @protocol.set_template_params( :name => 'Luis', :iter => 5 )
 
-      lambda{
-        @protocol.send_message
-      }.should_not raise_error Exception
+      expect{ @protocol.send_message }.not_to raise_exception( Exception )
     end
   end
+
 end

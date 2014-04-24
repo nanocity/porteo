@@ -1,87 +1,67 @@
-# encoding: UTF-8
+require 'spec_helper'
 
-require File.expand_path(File.join('.', 'spec_helper'), File.dirname(__FILE__))
-require 'yaml'
-
-describe Porteo::Sms_protocol do
+describe Porteo::Protocol::Sms do
 
   describe "Check required fields" do
 
+    let( :sms_config ){ YAML.load_file( EMITTER_PATH )[:sms][:default] }
+    let( :template ){   YAML.load_file( TEMPLATES_PATH + 'private.sms' ) }
+
     before(:each) do
-      @template = YAML.load_file( 'examples_helpers/config/templates/private.sms' )
-      gw_config = YAML.load_file( 'examples_helpers/config/clave.emitter' )
+      Twitter::REST::Client.any_instance.stub( :update ).and_return( true )
 
-      @protocol = Porteo::Sms_protocol.new( gw_config[:sms][:default] )
+      @protocol = Porteo::Protocol::Sms.new( sms_config )
+      @template = template
     end
 
-    # Check to sections
-    it "should raise an exception if text is longer than 160 characters" do
-      @template[:template][:text] = "a"*161
+    context "Validations" do
+      context "message body is longer than 160" do
 
-      @protocol.set_template( @template[:template].to_s, @template[:requires] )
+        after do
+          expect{ @protocol.send_message }.to raise_exception ArgumentError, /Protocol Error. The message is too long/
+        end
 
-      lambda{
-        @protocol.send_message
-      }.should raise_error ArgumentError,/Protocol Error. The message is too long/
+        it "should raise an exception" do
+          @template[:template][:text] = "a"*161
+          @protocol.set_template( @template[:template].to_s, @template[:requires] )
+        end
 
-      # Check the double count of extended gsm symbols
-      @template[:template][:text] = "a" * 143 + '€[]{}^\~|'
+        it "should double count extended gsm symbols" do
+          @template[:template][:text] = "a" * 143 + '€[]{}^\~|'
+          @protocol.set_template( @template[:template].to_s, @template[:requires] )
+        end
+      end
 
-      @protocol.set_template( @template[:template].to_s, @template[:requires] )
+      context "sending data is incorrect" do
+        after do
+          expect{ @protocol.send_message }.to raise_exception ArgumentError
+        end
 
-      lambda{
-        @protocol.send_message
-      }.should raise_error ArgumentError,/Protocol Error. The message is too long/
+        it "should raise an exception if country code is 1" do
+          @template[:template][:code] = "1"
+          @protocol.set_template( @template[:template].to_s, @template[:requires] )
+        end
 
-    end
+        it "should raise and exception if count is 12345" do
+          @template[:template][:code] = "12345"
+          @protocol.set_template( @template[:template].to_s, @template[:requires] )
+        end
 
-    # Check to sections
-    it "should raise an exception if country code is not correct" do
-      @template[:template][:code] = "1"
+        it "should raise an exception if phone number is not correct" do
+          @template[:template][:phone] = "12345678"
+          @protocol.set_template( @template[:template].to_s, @template[:requires] )
+        end
 
-      @protocol.set_template( @template[:template].to_s, @template[:requires] )
+        it "should raise an exception if sender is not correct" do
+          @template[:template][:sender] = "John Doe"
+          @protocol.set_template( @template[:template].to_s, @template[:requires] )
+        end
 
-      lambda{
-        @protocol.send_message
-      }.should raise_error ArgumentError
-
-      @template[:template][:code] = "12345"
-
-      @protocol.set_template( @template[:template].to_s, @template[:requires] )
-
-      lambda{
-        @protocol.send_message
-      }.should raise_error ArgumentError
-    end
-
-    # Check to sections
-    it "should raise an exception if phone number is not correct" do
-      @template[:template][:phone] = "12345678"
-
-      @protocol.set_template( @template[:template].to_s, @template[:requires] )
-
-      lambda{
-        @protocol.send_message
-      }.should raise_error ArgumentError
-    end
-
-    # Check to sections
-    it "should raise an exception if sender is not correct" do
-      @template[:template][:sender] = "John Doe"
-
-      @protocol.set_template( @template[:template].to_s, @template[:requires] )
-
-      lambda{
-        @protocol.send_message
-      }.should raise_error ArgumentError
-
-      @template[:template][:sender] = "FranciscoIbañezDeGuzman"
-
-      @protocol.set_template( @template[:template].to_s, @template[:requires] )
-
-      lambda{
-        @protocol.send_message
-      }.should raise_error ArgumentError
+        it "should raise an exception if sender is too long" do
+          @template[:template][:sender] = "FranciscoIbañezDeGuzman"
+          @protocol.set_template( @template[:template].to_s, @template[:requires] )
+        end
+      end
     end
   end
 end

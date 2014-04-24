@@ -1,18 +1,18 @@
 # Gems source
-source :rubygems
+source 'https://rubygems.org'
 
-gem 'twitter', '~> 4.4.1' # Send twitts
-gem 'pony', '~> 1.2' # Send Mails
-gem 'mensario', '~> 0.2.0' # Send SMS
+gem 'pony'     # Send Mails
+gem 'twitter'  # Send twitts
+gem 'mensario' # Send SMS
 
 group :development do
-  gem 'metric_fu', '>= 2.1.1'
-  gem 'simplecov', '>=0.3.8', :require => false
-  gem 'simplecov-rcov-text', :require => false
-  gem 'rake', '~> 0.9.2' # For run tests
-  gem 'yard', '~> 0.7.1' # Documentation
-  gem 'rspec', '~> 2.6.0' # Test
-  gem 'cucumber', '~> 0.10.5' # Cucumber
-  gem 'jeweler', '~> 1.6.0' # For create Rubygem
-  gem 'bluecloth', '~> 2.1.0' # Markdown parser for docs
+  gem 'rake'
+  gem 'yard'
+  gem 'rspec'
+  gem 'jeweler'
+  gem 'cucumber'
+  gem 'bluecloth'
+  gem 'metric_fu'
+  gem 'simplecov',           require: false
+  gem 'simplecov-rcov-text', require: false
 end

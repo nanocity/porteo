@@ -1,0 +1,9 @@
+:requires:
+  - :name
+  - :surname
+:template:
+  :from: "homer@nosolosoftware.biz"
+  :head: "Bienvenido a Porteo, <%= param[:name] %>"
+  :body: "Estimado amigo <%= param[:surname] %>, es mi deber darle la
+          bienvenida al maravilloso mundo de: PORTEO"
+  :tail: "Un cordial saludo"

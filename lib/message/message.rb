@@ -15,12 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Porteo. If not, see <http://www.gnu.org/licenses/>.
 
-require 'yaml'
-
-require 'protocols/twitter_protocol'
-require 'protocols/mail_protocol'
-require 'protocols/sms_protocol'
-
 # Porteo is an integrated message sending service.
 # It allows you to send messages by various protocols (sms, email, twitter)
 # using differents gateways (mensario, pony, twitter API). You can also
@@ -188,5 +182,4 @@ module Porteo
 
     end
   end
-
 end
