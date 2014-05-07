@@ -1,0 +1,8 @@
+:requires:
+  - :code
+  - :phone
+:template:
+  :text: "This a message from Porteo"
+  :code: "<%= param[:code] %>"
+  :phone: "<%= param[:phone] %>"
+  :sender: "BartSimpson"

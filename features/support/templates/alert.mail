@@ -1,8 +1,0 @@
-:requires:
-  - :name
-  - :iter
-:template:
-  :from:    "homer@nosolosoftware.biz"
-  :to:      "marge@nosolosoftware.biz"
-  :subject: "Alert <%= param[:name] %>"
-  :body:    "A loop <% param[:iter].times do %><%= param[:name] %><% end %>. Wow so much names!"

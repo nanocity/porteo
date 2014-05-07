@@ -38,13 +38,13 @@ module Porteo
       # @param [Hash] msg The message sections to send
       # @return [nil]
       def send_message( msg )
-        Mensario.set_config do
-          Mensario.license( @config[:license] )
-          Mensario.username( @config[:username] )
-          Mensario.password( @config[:password] )
+        ::Mensario.set_config do |m|
+          m.license = @config[:license]
+          m.username = @config[:username]
+          m.password = @config[:password]
         end
 
-        Mensario.send_message( {
+        ::Mensario.send_message( {
           :text => msg[:text],
           :sender => msg[:sender],
           :code => msg[:code],

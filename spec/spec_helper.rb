@@ -13,6 +13,5 @@ SimpleCov.start
 
 require 'porteo'
 
-EMITTER_PATH     = 'features/support/emitter.yml'
-TEMPLATES_PATH   = 'features/support/templates/'
-ATTACHMENTS_PATH = 'features/support/attachments/'
+EMITTER_PATH     = 'spec/support/empty.emitter'
+TEMPLATES_PATH   = 'spec/support/templates/'

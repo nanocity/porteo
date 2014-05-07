@@ -113,14 +113,13 @@ module Porteo
         raise ArgumentError, "Message Error. Invalid emitter file '#{@config_path}#{@emitter}.emitter'. Check emitter name is correct. Emitter path can also be set throught config_path."
       end
 
-
       raise ArgumentError, "Message Error. Profile '#{@profile}' not found." unless config[@protocol.to_sym][@profile.to_sym]
 
       begin
         # Creates a new instance of defined protocol
-        @protocol_obj = Porteo.const_get( "#{@protocol}_protocol".capitalize.to_sym ).new( config[@protocol.to_sym][@profile.to_sym] )
+        @protocol_obj = Porteo::Protocol.const_get( "#{@protocol}".capitalize.to_sym ).new( config[@protocol.to_sym][@profile.to_sym] )
       rescue NameError
-        raise ArgumentError, "Message Error. Undefined protocol. Check if '#{@protocol}_protocol.rb' is created and is valid."
+        raise ArgumentError, "Message Error. Undefined protocol. Check if '#{@protocol}.rb' is created and is valid."
       end
 
       # Set template values

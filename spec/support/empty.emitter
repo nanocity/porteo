@@ -10,17 +10,18 @@
       :password: ''
       :authentication: :plain
       :domain: "HELO"
+
 :twitter:
   :default:
-      :gateway: :twitter
-      :oauth_token: ""
-      :oauth_token_secret: ""
-      :consumer_key: ""
-      :consumer_secret: ""
+    :gateway: :twitter
+    :oauth_token: ''
+    :oauth_token_secret: ''
+    :consumer_key: ''
+    :consumer_secret: ''
 
 :sms:
   :default:
     :gateway: :mensario
-    :license:
-    :username:
-    :password:
+    :license: ''
+    :username: ''
+    :password: ''

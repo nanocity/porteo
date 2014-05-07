@@ -39,4 +39,3 @@ describe Porteo::Gateway::Pony do
     Porteo::Gateway::Pony.new( email_config ).send_message( email_data )
   end
 end
-

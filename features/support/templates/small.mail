@@ -1,6 +1,0 @@
-:requires: 
-  - :nombre
-  - :repeticiones
-:template: 
-  :from: "homer@nosolosoftware.biz"
-  :body : "Nombre: <%= param[:nombre] %>, Repeticiones: <%= param[:repeticiones] %>"

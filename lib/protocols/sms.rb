@@ -1,5 +1,3 @@
-# encoding: UTF-8
-
 # Copyright 2011 NoSoloSoftware
 #
 # This file is part of Porteo.
