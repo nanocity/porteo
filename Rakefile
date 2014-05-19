@@ -36,15 +36,15 @@ Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20
   gem.name = 'porteo'
   gem.homepage = 'http://github.com/nosolosoftware/porteo'
-  gem.license = 'GPLv3'
-  gem.summary = %Q{A Ruby gem for sending all kind of messages}
-  gem.description = %Q{Send all messages that you want in any protocol, its ready to send mail messages, twitts and sms with the apropiate gateway}
+  gem.license = 'MIT'
+  gem.summary = %Q{A Ruby gem for sending all kind of messages like emails, sms and twitts}
+  gem.description = %Q{This gem allows you to send messages using Email, Sms or Twitter. It can be easily extend to send some other kind of messages or use another gateways (Porteo, Mensario and Twitter)}
   gem.email = ['rgarcia@nosolosoftware.biz', 'lciudad@nosolosoftware.biz']
   gem.authors = ['Rafael Garcia', 'Luis Ciudad']
   # dependencies defined in Gemfile
 
   # Files not included
-  ['Gemfile', 'Rakefile', 'Gemfile.lock', 'examples_helpers/**/*', 'features/**/*', 'spec/**/*'].each do |d|
+  ['Gemfile', 'Rakefile', 'Gemfile.lock', 'spec/**/*'].each do |d|
     gem.files.exclude d
   end
 

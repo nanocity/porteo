@@ -5,4 +5,4 @@
   :from:    "homer@simpson.com"
   :to:      "marge@simpson.com"
   :subject: "Hi <%= param[:name] %>"
-  :body:    "I'm gonna loop <%= param[:loops].times %> times: <% param[:loops].times do %><%= param[:name] %><% end %>"
+  :body:    "I'm gonna loop <%= param[:loops] %> times: <% param[:loops].times do %><%= param[:name] %><% end %>"
