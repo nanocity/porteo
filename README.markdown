@@ -59,5 +59,5 @@ Porteo is developed by [NoSoloSoftware](http://nosolosoftware.biz).
 # License
 Porteo is Copyright 2011 NoSoloSoftware, it is free software.
 
-Porteo is distributed under GPLv3 license. More details can be found at COPYING file.
+Porteo is distributed under MIT license. More details can be found at MIT-LICENSE file.
 
